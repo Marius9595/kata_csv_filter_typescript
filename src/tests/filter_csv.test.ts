@@ -33,7 +33,7 @@ describe('filter csv should', () => {
 	const header = 'Num_invoice,Date,Gross,Net,IVA,IGIC,Concept,CIF_client,NIF_client';
 
 	it('not filter correct invoices', () => {
-		const invoice = '1,02/05/2019,1008,810,19,,ACERLaptop,B76430134';
+		const invoice = '1,02/05/2019,1008,810,19,,ACERLaptop,B76430134,';
 		const csv = [header, invoice];
 
 		const csv_filtered = new FilterCSV().filter(csv);
@@ -42,7 +42,16 @@ describe('filter csv should', () => {
 	});
 
 	it('filter a invoice with IVA and IGIC declared because are mutually exclusive', () => {
-		const invoice = '1,02/05/2019,1008,810,19,19,ACERLaptop,B76430134';
+		const invoice = '1,02/05/2019,1008,810,19,19,ACERLaptop,B76430134,';
+		const csv = [header, invoice];
+
+		const csv_filtered = new FilterCSV().filter(csv);
+
+		expect(csv_filtered).toStrictEqual([]);
+	});
+
+	it('filter a invoice with NIF_client and CIF_client declared because are mutually exclusive', () => {
+		const invoice = '1,02/05/2019,1008,810,19,,ACERLaptop,B76430134,F74433134';
 		const csv = [header, invoice];
 
 		const csv_filtered = new FilterCSV().filter(csv);
