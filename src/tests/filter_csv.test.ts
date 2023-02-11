@@ -47,6 +47,6 @@ describe('filter csv should', () => {
 
 		const csv_filtered = new FilterCSV().filter(csv);
 
-		expect(csv_filtered).toBe([]);
+		expect(csv_filtered).toStrictEqual([]);
 	});
 });
