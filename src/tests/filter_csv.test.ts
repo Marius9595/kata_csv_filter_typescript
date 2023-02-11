@@ -13,7 +13,7 @@ Headers: Num_invoice, Date, Gross, Net ,IVA, IGIC, Concept, CIF_client, NIF_clie
     CIF_client and NIF_client are mutually exclusive
     - ["<Num_invoice>,<Date>,<Gross>,<Net>,<IVA>,<IGIC>,<Concept>,B76430134,F74433134"] -> []
 
-    Net = Gross * Taxes(IVA or IGIC)
+    Net = Gross - Gross * Taxes(IVA or IGIC)
     - ["<Num_invoice>,<Date>,100,120,19,,<Concept>,<NIF_client>,<CIF_client>"] -> []
 
     If there are more than one facture with same reference (number of facture), these are invalid
@@ -31,7 +31,7 @@ describe('filter csv should', () => {
 	const header = 'Num_invoice,Date,Gross,Net,IVA,IGIC,Concept,CIF_client,NIF_client';
 
 	it('not filter correct invoices', () => {
-		const invoice = '1,02/05/2019,1008,810,19,,ACERLaptop,B76430134,';
+		const invoice = '1,02/05/2019,100,80,20,,ACERLaptop,B76430134,';
 		const csv = [header, invoice];
 
 		const csv_filtered = new FilterCSV().filter(csv);
@@ -40,7 +40,7 @@ describe('filter csv should', () => {
 	});
 
 	it('filter an invoice with IVA and IGIC declared because are mutually exclusive', () => {
-		const invoice = '1,02/05/2019,1008,810,19,19,ACERLaptop,B76430134,';
+		const invoice = '1,02/05/2019,100,80,19,19,ACERLaptop,B76430134,';
 		const csv = [header, invoice];
 
 		const csv_filtered = new FilterCSV().filter(csv);
@@ -58,7 +58,7 @@ describe('filter csv should', () => {
 	});
 
 	it('filter an invoice whose net was not correctly calculated', () => {
-		const invoice = '1,02/05/2019,100,121,20,,ACERLaptop,B76430134,';
+		const invoice = '1,02/05/2019,100,90,20,,ACERLaptop,B76430134,';
 		const csv = [header, invoice];
 
 		const csv_filtered = new FilterCSV().filter(csv);
