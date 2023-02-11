@@ -5,6 +5,9 @@ export class FilterCSV {
 		if (invoice[4] !== '' && invoice[5] !== '') {
 			return [];
 		}
+		if (invoice[7] !== '' && invoice[8] !== '') {
+			return [];
+		}
 		return csv;
 	}
 }
