@@ -37,4 +37,12 @@ describe('filter csv should', () => {
 
 		expect(csv_filtered).toBe(csv);
 	});
+
+	it('filter a bill with IVA and IGIC declared because are mutually exclusive', () => {
+		const csv = ["1,02/05/2019,1008,810,19,19,ACERLaptop,B76430134"];
+
+		const csv_filtered = new FilterCSV().filter(csv);
+
+		expect(csv_filtered).toBe([]);
+	});
 });
