@@ -5,8 +5,11 @@ Skipping the reading and loading of csv files. You have to develop the logic beh
 - If there are more than one facture with same reference (number of facture), these are invalid
 - IVA and IGIC are mutually exclusive. If some facture has the two ones declared, it is a invalid facture
 - CIF and NIF are mutually exclusive. If some facture has the two ones declared, it is a invalid facture
-- net is the result of applying sum of gross and his corresponding tax. If this is not met, it is a invalid facture
+- Net is the result of applying sum of gross and his corresponding tax. If this is not met, it is a invalid facture
 
+The csv has the following headers:
+
+`Num_bill, Date, Gross, IVA, IGIC, Concept, CIF_client, NIF_client`
 ## Instructions
 * `npm upgrade`
 * `npm install`
