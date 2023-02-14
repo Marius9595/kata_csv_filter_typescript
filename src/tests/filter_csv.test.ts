@@ -27,11 +27,37 @@ Headers: Num_invoice, Date, Gross, Net ,IVA, IGIC, Concept, CIF_client, NIF_clie
     - ["1,02/05/2019,1008,810,19,,ACERLaptop,B76430134"] -> Error
  */
 
+interface StubInvoiceParams {
+	num_invoice?: string;
+	date?: string;
+	gross?: string;
+	net?: string;
+	iva?: string;
+	igic?: string;
+	concept?: string;
+	cif_client?: string;
+	nif_client?: string;
+}
+
 describe('filter csv should', () => {
 	const header = 'Num_invoice,Date,Gross,Net,IVA,IGIC,Concept,CIF_client,NIF_client';
 
+	function StubInvoiceHaving({
+		num_invoice = '1',
+		date = '02/05/2019',
+		gross = '100',
+		net = '80',
+		iva = '20',
+		igic = '',
+		concept = 'concept of invoice',
+		cif_client = 'B76430134',
+		nif_client = '',
+	}: StubInvoiceParams) {
+		return [num_invoice, date, gross, net, iva, igic, concept, cif_client, nif_client].join(',');
+	}
+
 	it('not filter correct invoices', () => {
-		const invoice = '1,02/05/2019,100,80,20,,ACERLaptop,B76430134,';
+		const invoice = StubInvoiceHaving({});
 		const csv = [header, invoice];
 
 		const csv_filtered = new FilterCSV().filter(csv);
@@ -40,7 +66,7 @@ describe('filter csv should', () => {
 	});
 
 	it('filter an invoice with IVA and IGIC declared because are mutually exclusive', () => {
-		const invoice = '1,02/05/2019,100,80,19,19,ACERLaptop,B76430134,';
+		const invoice = StubInvoiceHaving({ igic: '20', iva: '20' });
 		const csv = [header, invoice];
 
 		const csv_filtered = new FilterCSV().filter(csv);
@@ -49,7 +75,7 @@ describe('filter csv should', () => {
 	});
 
 	it('filter an invoice with NIF_client and CIF_client declared because are mutually exclusive', () => {
-		const invoice = '1,02/05/2019,1008,810,19,,ACERLaptop,B76430134,F74433134';
+		const invoice = StubInvoiceHaving({ nif_client: 'F74433134', cif_client: 'B76430134' });
 		const csv = [header, invoice];
 
 		const csv_filtered = new FilterCSV().filter(csv);
@@ -58,7 +84,7 @@ describe('filter csv should', () => {
 	});
 
 	it('filter an invoice whose net was not correctly calculated', () => {
-		const invoice = '1,02/05/2019,100,90,20,,ACERLaptop,B76430134,';
+		const invoice = StubInvoiceHaving({ gross: '100', iva: '20', net: '90' });
 		const csv = [header, invoice];
 
 		const csv_filtered = new FilterCSV().filter(csv);
